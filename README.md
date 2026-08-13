@@ -34,4 +34,3 @@ Questions state Scripture references with their answers. Notes marked **Adventis
 ## Scope of this stage
 
 This is the unlicensed playable game stage. A real license flow requires an approved server, database, and public privacy/contact details; it should not be replaced by a client-side gate.
-# Test for auto-deploy
