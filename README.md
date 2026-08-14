@@ -10,7 +10,7 @@ Each new match randomizes the order of the mirror gates and independently shuffl
 
 ## Music and narration
 
-The opening screen has opt-in controls for gentle generated ambient music and voice narration. The soundtrack, answer chimes, and spoken prompts use the browser’s local audio/speech features; no external recordings, tracking, or copyrighted music files are bundled. Either control can remain off for a quiet group-study setting.
+The game runs with gentle generated ambient music and voice narration always on: questions, prompts, and outcomes are spoken aloud and a quiet soundtrack plays throughout the match. The soundtrack, answer chimes, and spoken prompts use the browser’s local audio/speech features; no external recordings, tracking, or copyrighted music files are bundled. Audio starts on the first user interaction (as browsers require).
 
 ## Competitive play
 

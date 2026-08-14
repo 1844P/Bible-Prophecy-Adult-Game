@@ -13,7 +13,7 @@
     <header><div class="eyebrow">Daniel · Revelation · Bible Study</div><h1>Bible Prophecy: Adult Edition</h1><p class="subtitle">A thoughtful, Scripture-centered quiz for home, Sabbath School, or retreat.</p></header>
     <section id="welcome" class="card">
       <h2>Choose your mode</h2><p>560 questions move through twenty Daniel ↔ Revelation mirror gates. Every gate repeatedly tests Daniel’s prophetic pattern and Revelation’s enlargement, so interpretative parallels—not isolated trivia—dominate the match. In two-player mode, take turns on one device.</p><div class="mirror-map"><div class="book dan">DANIEL: pattern</div><div class="bridge">↔ repeats & enlarges ↔</div><div class="book rev">REVELATION: counterpart</div></div><p><b>Competitive rules:</b> faster correct answers earn more points; every fifth question is a double-base bonus round; each player may arm one Double Score; and a missed answer gives the other player a seven-second steal chance.</p>
-      <div class="audio-controls"><label><input id="music-toggle" type="checkbox"> Ambient music <small>gentle, generated in-app</small></label><label><input id="voice-toggle" type="checkbox"> Voice narration <small>reads prompts and outcomes</small></label></div>
+      <div class="audio-controls"><label>Ambient music <small>gentle, generated in-app · always on</small></label><label>Voice narration <small>reads prompts and outcomes · always on</small></label></div>
       <div class="mode-grid"><button class="mode" data-mode="1"><strong>1 Player</strong>Build your own score and streak.</button><button class="mode" data-mode="2"><strong>2 Players</strong>Alternate turns with separate scores.</button></div>
       <button id="begin" class="start" disabled>Begin the study</button>
       <p class="disclaimer">Interpretive notes labelled “Adventist historicist study note” reflect the supplied question source. Scripture references are provided so players can study the text directly.</p>
@@ -88,7 +88,7 @@
   ].map(([theme,bridge,daniel,revelation])=>({theme,bridge,daniel,revelation}));
   let players=[], index=0, answered=false, currentPlayer=0, stealing=false, timerId=null, startedAt=0, timeLimit=0, activeMirrorGraph=[], activeQuestions=[];
   const $=id=>document.getElementById(id);
-  let audioContext=null, musicTimer=null, musicStep=0, musicEnabled=false, voiceEnabled=false;
+  let audioContext=null, musicTimer=null, musicStep=0, musicEnabled=true, voiceEnabled=true;
   function getAudioContext(){
     if(!audioContext){const AudioContextClass=window.AudioContext||window.webkitAudioContext;if(!AudioContextClass)return null;audioContext=new AudioContextClass()}
     if(audioContext.state==='suspended')audioContext.resume();
@@ -105,8 +105,6 @@
   function stopMusic(){if(musicTimer){clearInterval(musicTimer);musicTimer=null}}
   function cue(kind){if(!musicEnabled)return;if(kind==='correct'){tone(523.25,.25,.07,'triangle');tone(659.25,.45,.06,'triangle',.13)}else if(kind==='wrong')tone(174.61,.35,.045,'sine');else tone(392,.18,.035,'triangle')}
   function narrate(text){if(!voiceEnabled||!('speechSynthesis' in window))return;window.speechSynthesis.cancel();const line=new SpeechSynthesisUtterance(text);line.lang='en-US';line.rate=.93;line.pitch=1;line.volume=.78;window.speechSynthesis.speak(line)}
-  $('music-toggle').onchange=event=>{musicEnabled=event.target.checked;if(musicEnabled)startMusic();else stopMusic()};
-  $('voice-toggle').onchange=event=>{voiceEnabled=event.target.checked;if(!voiceEnabled&&'speechSynthesis' in window)window.speechSynthesis.cancel()};
   document.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-mode]').forEach(x=>x.style.borderColor='');b.style.borderColor='#e6b85c';$('begin').disabled=false;$('begin').dataset.mode=b.dataset.mode});
   // Each mirror gate contains Daniel first, then Revelation. The gates rise
   // in difficulty together, keeping the books in a deliberate parallel path.
@@ -171,7 +169,7 @@
   }
   const difficultyNames = ['Foundation', 'Developing', 'Advanced', 'Deep Study', 'Prophetic Foundations', 'Prophetic Patterns', 'Interpretive Study', 'Mastery'];
   const progressLevel = () => Math.min(7, Math.floor(index / Math.ceil(activeQuestions.length / 8)));
-  $('begin').onclick=()=>{players=Array.from({length:+$('begin').dataset.mode},(_,i)=>({name:`Player ${i+1}`,score:0,streak:0,best:0,powerUsed:false,powerArmed:false,fastMs:0}));index=0;activeMirrorGraph=scramble(mirrorGraph);activeQuestions=activeMirrorGraph.flatMap(generateGateQuestions).map(shuffleAnswers);$('welcome').classList.add('hidden');$('game').classList.remove('hidden');render()};
+  $('begin').onclick=()=>{startMusic();players=Array.from({length:+$('begin').dataset.mode},(_,i)=>({name:`Player ${i+1}`,score:0,streak:0,best:0,powerUsed:false,powerArmed:false,fastMs:0}));index=0;activeMirrorGraph=scramble(mirrorGraph);activeQuestions=activeMirrorGraph.flatMap(generateGateQuestions).map(shuffleAnswers);$('welcome').classList.add('hidden');$('game').classList.remove('hidden');render()};
   function updateScoreboard(){
     $('scores').innerHTML=players.map((p,i)=>`<div class="score ${i===currentPlayer?'active':''}"><strong>${p.name}</strong> · ${p.score} pts · streak ${p.streak}</div>`).join('');
     if(players.length===1){$('lead').textContent=`Personal challenge: ${players[0].best} is your best streak.`;return}
